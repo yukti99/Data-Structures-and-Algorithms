@@ -1,0 +1,38 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+
+queue<int> q;
+
+void push(int item){
+    int s = q.size();
+    q.push(item);
+    for(int i=0;i<s;i++){
+            q.push(q.front());
+            q.pop();
+
+    }
+}
+void pop(){
+    q.pop();
+}
+
+int top(){
+    return q.front();
+}
+
+
+int main(){
+
+    push(10);
+    push(20);
+    cout << top() << endl;
+    pop();
+    push(30);
+    pop();
+    cout << top() << endl;
+
+
+
+    return 0;
+}
