@@ -2,9 +2,11 @@
 #include <stdlib.h>
 #include <string.h>
 
+
 // KMP
 
 // m- length of pattern
+// longest prefix which is also a suffix
 void LPS(char *pat,int m,int *lps){
 	
 	int len = 0,i = 1;

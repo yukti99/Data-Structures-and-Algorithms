@@ -4,12 +4,16 @@
 #include <stdlib.h>
 #include <limits.h>
 
+
+
+/*In linked list what we call head ,in stack we call it top*/
+
 struct StackNode{
 	
 	int data;
 	struct StackNode* next;
 };
-
+/*
 struct StackNode* CreateNode(int data){
 	struct StackNode *stackNode = (struct StackNode*)malloc(sizeof(struct StackNode));
 	stackNode->data = data;
@@ -27,7 +31,22 @@ void push(struct StackNode** top){
 	s->next = *top;
 	*top = s;
 	printf("\nPushed to stack -%d\n",item);
+}*/
+
+void push(struct StackNode **top){
+	
+	int item;
+	printf("Enter the item you want to push in the stack : ");
+	scanf("%d",&item);
+	struct StackNode* s = (struct StackNode*)malloc(sizeof(struct StackNode));
+	s->data = item;
+	// like changing head of linked list
+	s->next = *top;
+	*top = s;
+	printf("\nPushed to stack -%d\n",item);
+	
 }
+
 int isEmpty(struct StackNode*top){
 	return (!top);
 }

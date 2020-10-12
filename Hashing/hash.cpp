@@ -9,43 +9,69 @@
 #define SIZE 10
 
 
-struct Hash{
-	
-	int data;
-	struct Hash* next;
+struct Node{
+	int key;
+	struct Node* next;
 };
 
+struct Hash{
+	
+	struct Node* head;
+	int count;
+};
 
+struct Hash *hash_table = NULL ;
 
 int hashFunc(int key){
 	return (key % SIZE);
 }
-void insert(struct Hash *hash_table[],int item){
 
-	int h = hashFunc(item);
-	
-	struct Hash *temp = (struct Hash*)malloc(sizeof(struct Hash));
-	temp->data = item; 
-						
-	temp->next = hash_table[h];
-	hash_table[h] = temp;
+struct Node* CreateNode(int key){
+	struct Node* h = (struct Node*)malloc(sizeof(struct Node));
+	h->key = key;
+	h->next = NULL;
+	return h;
 }
 
-void display(struct Hash *hash_table[]){
+void insert(int key){
+	struct Node* temp = CreateNode(key);
+	int h = hashFunc(key);
+	
+	// entry of first element at that index
+	if (hash_table[h].head == NULL ){
+		hash_table[h].head = temp;
+		hash_table[h].count = 1;
+		return ;		
+	}
+	temp->next = hash_table[h].head;
+	hash_table[h].head = temp;
+	/*
+	struct Node* p = hash_table[h].head;
+	while(p->next != NULL){
+		p = p->next;
+	}
+	p->next = temp;*/
+	hash_table[h].count++;
+
+	
+}
+
+
+void display(){
 	
 	printf("\nTHE HASH TABLE OF SIZE %d :\n\n",SIZE);
-	struct Hash *p = NULL;
+	struct Node *p = NULL;
 	int i=0;
 	for(i=0;i<SIZE;i++){
 		
-		if (hash_table[i] != NULL){			
-			p = hash_table[i];
-			printf("%d",p->data);
-			while(p->next != NULL){				
-				p = p->next;
-				printf("->%d",p->data);
-			}			
-		} 
+		if (hash_table[i].count == 0)
+			continue;
+			
+		p = hash_table[i].head;
+		while(p!= NULL){
+			printf("%d ",p->key);
+			p = p->next;
+		}
 		printf("\n");		
 	}
 	printf("\n");
@@ -55,11 +81,8 @@ void display(struct Hash *hash_table[]){
 
 int main(){
 	printf("\n\tHASH TABLE\n");
-	struct Hash **hash_table[SIZE];
 	int i=0,x,choice;
-	for(i=0;i<SIZE;i++){
-		*hash_table[i] = NULL;
-	}	
+	int a[] = {0,1,2,3,4,5,6,7,8,9};
 	while(1){
 		printf("\n\tWhat do you want to do?\n\n");
 		printf("\t1. Insertion\n");
@@ -71,17 +94,16 @@ int main(){
 			case 1:							
 				printf("Enter the Element to be inserted in Hash Table = ");
 				scanf("%d",&x);			
-				insert(hash_table,x);
+				insert(x);
 				break;
 			case 2: 
-				display(hash_table);
+				display();
 				break; 				
 			case 3:
 				printf("\nThank you!!\n");
 				exit(0);
 			default:
-				printf("\nWrong choice!\n");
-			
+				printf("\nWrong choice!\n"); 		
 		}
 	
 	}

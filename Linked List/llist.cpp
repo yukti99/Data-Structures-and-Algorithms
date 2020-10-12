@@ -126,6 +126,18 @@ int Search(int key){
 	return (temp!=NULL?index:-1);
 	
 }
+// recursive function for length of the linked list
+/* Counts the no. of occurences of a node
+   (search_for) in a linked list (head)*/
+int getCount(struct Node* head)
+{
+    // Base case
+    if (head == NULL)
+        return 0;
+ 
+    // count is 1 + count of remaining list
+    return 1 + getCount(head->next);
+}
 
 int length(){
 	
@@ -138,10 +150,25 @@ int length(){
 	return l;
 }
 
+void DeleteList(){	
+
+	struct Node *current = head;
+	struct Node *next;
+	while(current != NULL){
+		
+		next = current->next; //storing next of current in next
+		free(current);
+		current = next;
+	}
+	head = NULL;
+	
+}
+
 
 // printing the linked list starting from the head node
 void printList(struct Node* node){
 	
+	printf("\nLinked List : ");
 	while(NULL != node){
 		printf("%d ",node->data);
 		node = node->next;		
@@ -152,6 +179,7 @@ void printList(struct Node* node){
 
 // Driver program 
 int main(){
+	Reverse();
 	
 	append(2);
 	append(5);
@@ -172,6 +200,9 @@ int main(){
 	Reverse();
 	printf("\nAfter Reversing the linked list : ");
 	printList(head);
+	DeleteList();
+	printList(head);
+	
 	
 	
 	return 0;

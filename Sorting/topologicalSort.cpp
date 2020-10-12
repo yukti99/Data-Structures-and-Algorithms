@@ -1,4 +1,5 @@
 #include <stdio.h>
+/* Topological Sorting */
 #include <stdlib.h>
 #include "Q.c"
 #include "St.c"
@@ -44,36 +45,13 @@ void AddEdge(struct Graph* g,int src,int dest){
 	struct Node* n = CreateNode(dest);
 	n->next = g->adjlists[src];
 	g->adjlists[src] = n;	
-	// from  dest to src
-	/*n = CreateNode(src);
-	n->next = g->adjlists[dest];
-	g->adjlists[dest] = n;*/	
 }
 void unvisit(struct Graph* g){
 	int i;
 	for(i=0;i<g->V;i++)
 		g->visited[i] = 0;
 }
-// DFS using Stack
-void DFS(struct Graph* g,int i){
-	struct Stack* st = CreateS(SIZE);
-	g->visited[i] = 1;
-	push(st,i);
-	while(!isEmptyS(st)){
-		int v = pop(st);
-		printf("%d ",v);
-		struct Node* temp = g->adjlists[v];
-		while(temp){
-			int adjV = temp->vertex;
-			if (g->visited[adjV] == 0){
-				g->visited[adjV] = 1;
-				push(st,adjV);
-			}
-			temp = temp->next;
-		}		
-	}
-	
-}
+
 // Recursive DFS
 void dfs(struct Graph* g,int s){
 	g->visited[s] = 1;
@@ -89,28 +67,12 @@ void dfs(struct Graph* g,int s){
 	}
 }
 
-void BFS(struct Graph* g,int s){	
-
-	struct Queue* q = CreateQ(SIZE);
-	g->visited[s] = 1;
-	Enqueue(q,s);
-	while(!isEmpty(q)){		
-		// current node
-		int v = Dequeue(q);
-		printf("%d ",v);		
-		// finding its adjacent nodes
-		struct Node* temp = g->adjlists[v];
-		while(temp){
-			int adjV = temp->vertex;			
-			if (g->visited[adjV] == 0){
-				g->visited[adjV] = 1;
-				Enqueue(q,adjV);
-			}
-			temp = temp->next;
-		}		
-	}
-
+void TopologicalSort(struct Graph* g){
+	struct Stack* s = CreateS(SIZE);
+	
 }
+
+
 
 void printGraph(struct Graph* g){
 	int i;
@@ -125,8 +87,8 @@ void printGraph(struct Graph* g){
 	}	
 }
 int main(){	
-	int V = 4,i;
-	struct Graph* g = CreateGraph(V);
+	int V = 6,i;
+	struct Graph* g = CreateGraph(V);	
 	AddEdge(g,0,1);
 	AddEdge(g,0,2);
 	AddEdge(g,1,2);
@@ -136,6 +98,7 @@ int main(){
 	AddEdge(g,4,1);
 	AddEdge(g,4,5);
 	AddEdge(g,4,0);
+	
 	printf("\nThe Graph using Adjacency Lists : \n");
 	printGraph(g);
 	printf("\nBFS traversal of the Graph : \n");	

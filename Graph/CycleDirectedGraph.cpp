@@ -1,0 +1,108 @@
+// CYCLE DETECTION IN UNDIRECTED GRAPH
+// Implentation of graph is through adjacency lists
+
+#include <stdio.h>
+#include <stdlib.h>
+
+struct Node{	
+	int vertex;
+	struct  Node* next;
+};
+
+struct Graph{
+	int V ;
+	int *visited;
+	struct Node **a;
+};
+
+
+struct Node* newNode(int v){	
+	struct Node* n = (struct Node*)malloc(sizeof(struct Node));
+	n->vertex = v;
+	n->next = NULL;
+	return n;
+}
+
+struct Graph* CreateGraph(int V){
+	struct Graph* g = (struct Graph*)malloc(sizeof(struct Graph));
+	g->a = (struct Node**)malloc(V*sizeof(struct Node*));
+	g->V = V ;
+	g->visited = (int*)malloc(V*sizeof(int));
+	int i=0;
+	for(i=0;i<V ;i++){
+		g->a[i] = NULL;
+		g->visited[i] = 0; 		
+	}	
+	return g;
+}
+
+void addEdge(struct Graph* g,int src,int dest){
+	//from source to destination
+	struct Node* n1 = newNode(dest);
+	n1->next = g->a[src];
+	g->a[src] = n1;
+	
+	
+}
+void printGraph(struct Graph* g){
+	printf("\nGRAPH : \n");
+	int i;
+	for(i=0; i<g->V ;i++){
+		struct Node* n = g->a[i];
+		printf("\nAdjacency List of vertex %d -> ",i);
+		while(n){
+			printf("%d -> ",n->vertex);
+			n = n->next;
+		}
+		printf("NULL\n");
+	}
+}
+// using DFS approach
+int dfs(struct Graph* g,int v,int parent){
+	g->visited[v] = 1;
+	struct Node* temp = g->a[v];
+	while(temp){
+		int adgV = temp->vertex;
+		if (g->visited[adgV] == 0){
+			g->visited[adgV] = 1;
+			if (dfs(g,adgV ,v))
+				return 1;
+		}
+		else{
+			if (adgV != parent)
+			return 1;
+		}
+		temp = temp->next;
+	}
+	return 0;
+
+}
+int isCyclic(struct Graph* g){
+	int u=0;
+	for(u = 0 ;u <g->V ;u++){
+		if (!g->visited[u]){
+			if (dfs(g,u,-1))
+				return 1;
+		}		
+	}
+	return 0;
+}
+
+int main(){
+	
+	int V = 5;
+	struct Graph* g = CreateGraph(V);
+	addEdge(g,0,1);
+	addEdge(g,0,2);	
+	addEdge(g,1,4);
+	addEdge(g,2,3);
+	addEdge(g,3,1);
+	printGraph(g);
+	if (isCyclic(g))
+		printf("\nThe Graph is Cyclic!\n");	
+	else
+		printf("\nThe Graph is NOT Cyclic!\n");
+	
+	return 0;
+}
+

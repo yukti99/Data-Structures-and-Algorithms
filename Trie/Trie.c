@@ -61,7 +61,7 @@ void DisplayTrie(struct TrieNode* root,char str[],int level){
 	
 	if (root->isEndOfWord){
 		j++;
-		str[level] = '\0';
+		str[level] = '\0';   // imp for correct printing
 		printf("%d.\t%s\n",j,str);
 	}
 	int i;
